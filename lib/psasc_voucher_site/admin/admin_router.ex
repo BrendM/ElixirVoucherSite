@@ -20,13 +20,23 @@ import Ecto.Query
   end
 
   delete "/users" do
-     {num, _} = (from(u in PsascVoucherSite.User) |> PsascVoucherSite.Repo.delete_all)
-     inspect num
+    IO.inspect conn.body_params
+    query = from(u in PsascVoucherSite.User)
+    {num, _} = (query |> PsascVoucherSite.Repo.delete_all)
+    inspect num
     respond(conn, {:ok, Poison.encode!(%{message: "Users deleted"})})
   end
 
+  delete "/user" do
+      IO.inspect conn.body_params
+      query = from(u in PsascVoucherSite.User, where: u.id == conn.bod_params["id"])
+      {num, _} = (query |> PsascVoucherSite.Repo.delete_all)
+      inspect num
+      respond(conn, {:ok, Poison.encode!(%{message: "User deleted"})})
+    end
+
   put "/user" do
-    user_json = conn.body_params
+    user_json = conn.body_params["user"]
 
     user = %PsascVoucherSite.User{email: user_json["email"], name: user_json["name"], password: user_json["password"],
     admin: user_json["admin"], excel_friendly_name: user_json["excel_friendly_name"]}

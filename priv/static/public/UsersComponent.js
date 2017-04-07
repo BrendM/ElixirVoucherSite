@@ -47,14 +47,30 @@ class UsersComponent extends React.Component {
         });
     }
 
+    deleteUser(id)
+    {
+        this.api.deleteUser({id: id}, (err, res) =>
+        {
+            if (err)
+            {
+                this.props.displayError(err);
+            } else
+            {
+                this.populateUsers();
+            }
+        });
+    }
+
     addUser()
     {
         this.api.addUser({
-            email: this.state.email,
-            password: this.state.password,
-            name: this.state.name,
-            admin: this.state.admin,
-            excel_friendly_name: this.state.excel_friendly_name
+            user: {
+                email: this.state.email,
+                password: this.state.password,
+                name: this.state.name,
+                admin: this.state.admin,
+                excel_friendly_name: this.state.excel_friendly_name
+            }
         }, (err, res)=>
         {
             if (err)
@@ -76,6 +92,8 @@ class UsersComponent extends React.Component {
                 <td>Name:{user.name}</td>
                 <td>Email:{user.email}</td>
                 <td>isAdmin:{user.admin}</td>
+                <td><button onClick={()=>{this.deleteUser(user.id)}}> Delete User
+                </button></td>
             </tr>;
         });
         return (
@@ -84,7 +102,7 @@ class UsersComponent extends React.Component {
 
                 <div className="delete"><input className="delete deleteUsers"
                                                onClick={()=>{this.deleteUsers();}}
-                                               type="button" value="delete"/></div>
+                                               type="button" value="Delete All"/></div>
                 <div className="addUser">
                     <p>Add user</p>
                     <input className="text" onChange={(event) => {this.setState({email:event.target.value})}}

@@ -6,17 +6,21 @@ class AdminServerApi {
     {
     }
 
-    addUser(user, cb)
+    addUser(options, cb)
     {
-        this.sendWithJsonParse("PUT", "/admin/user", user, cb);
+        this.sendWithJsonParse("PUT", "/admin/user", options, cb);
     }
 
     getUsers(options, cb){
-        this.sendWithJsonParse("GET", "/admin/users", {}, cb);
+        this.sendWithJsonParse("GET", "/admin/users", options, cb);
     }
 
     deleteUsers(options, cb){
-        this.sendWithJsonParse("DELETE", "/admin/users", {}, null, cb);
+        this.sendWithJsonParse("DELETE", "/admin/users", options, null, cb);
+    }
+
+    deleteUser(options, cb){
+        this.sendWithJsonParse("DELETE", "/admin/user", options, null, cb);
     }
 
     send(method, endPoint, body, resParser, cb)
